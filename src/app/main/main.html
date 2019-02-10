@@ -1,0 +1,91 @@
+<div class="container panel-body" >
+   <div class="panel panel-success" ng-if="!main.model.showResults"> 
+		<div class="panel-heading"> 
+			<h3 class="panel-title">Javascript Quiz <span ng-if="main.model.questions.length>0" >  {{main.model.question+1}} of  {{main.model.questions.length}} </span></h3> 
+		</div> 
+		<div class="panel-body" ng-if="main.model.questions.length==0">
+			 <h3 ng-if="main.model.pageError===null" class="lead text-center">Loading Questions...</h3>
+			 <h3 ng-if="main.model.pageError!==''" class="lead text-center">{{main.model.pageError}}</h3>
+		</div>
+		<div class="panel-body" ng-if="main.model.questions.length>0"> 
+		    <p class="lead">{{main.model.question+1}}) {{main.model.questions[main.model.question].text}} </p>
+			<ul class="list-unstyled">
+			  <li ng-repeat="option in main.model.questions[main.model.question].options track by $index" >
+				 <p class="text-mute legend" >{{main.model.answerTextMap[$index]}} - {{option}} </p>
+			  </li>
+			</ul>
+			<div class="row" >
+				<div class="col-md-12"  >
+					<p>
+						<strong>Explanation : </strong>  {{main.model.questions[main.model.question].explanation}}
+					 </p>
+				</div>
+			</div>
+			<div class="row" >
+				<div class="col-md-4 col-md-offset-4"  >
+					<div class="btn-group" role="group-selection" >
+					  <button ng-class="{'btn-success':$index===main.model.questions[main.model.question].selectedAns,'btn-primary':$index!==main.model.questions[main.model.question].selectedAns}"  ng-repeat="option in main.model.questions[main.model.question].options track by $index" ng-click="main.methods.setSelected($index)"   type="button" class="btn btn-lg"  >{{main.model.answerTextMap[$index]}}</button>
+					</div>
+				</div>
+				<div class="col-md-1 " >
+					<button class="btn btn-lg btn-warning " ng-click="main.methods.nextQuestion()" ng-if="(main.model.question+1) != main.model.questions.length && main.model.questions[main.model.question].selectedAns!=null"    > Next >></button>
+					<button class="btn btn-lg btn-warning " ng-click="main.methods.ShowResults()" ng-if="(main.model.question+1) >= main.model.questions.length && main.model.questions[main.model.question].selectedAns!=null"    > Done </button>
+				</div>
+			</div>
+		 </div> 
+    </div>
+	
+	  <div class="panel panel-success" ng-if="main.model.showResults"> 
+		<div class="panel-heading"> 
+			<h3 class="panel-title">Javascript Quiz Results </h3> 
+		</div> 
+		<div class="panel-body"> 
+			<div class="row" >
+				<div class="col-md-10 col-md-offset-1"  >
+					<table class="table table-stripped table-bordered" >
+						<thead class="text-center" >
+							<tr class="active" >
+							   <th width="11%" >
+							      Question #
+							   </th>
+							   <th width="40%" >
+							      Question
+							   </th>
+							   <th colspan="2" width="40%" class="text-center" >
+							      Selected Answers
+							   </th>
+							   <th width="9%"  class="text-center" >
+							      Result
+							   </th>
+							</tr>
+						</thead>
+						<tbody>
+						   <tr ng-repeat="question in main.model.questions track by $index">
+						       <td class="text-right">{{$index+1}}</td>
+							   <td>{{question.text}}</td>
+							   <td class="text-center" ng-repeat="ans in question.options" ng-class="{'info' : $index===question.selectedAns}" >{{main.model.answerTextMap[$index]}}</td>
+							   <td class="text-center" ng-class="{'success':question.answer===question.selectedAns, 'danger':question.answer!=question.selectedAns}" ><i ng-class="{'glyphicon glyphicon-ok':question.answer===question.selectedAns, 'glyphicon glyphicon-remove':question.answer!=question.selectedAns}" /></td>
+							</tr>
+							<tr>
+								<td colspan="4" class="text-right">
+								  <strong>Total correct answers</strong>
+								</td>
+								<td class="text-center" >
+								   <strong>{{main.methods.getCorrectAnswers()}}</strong>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="4" class="text-right">
+								  <strong>Percentage</strong>
+								</td>
+								<td class="text-center" >
+								   <strong>{{main.methods.getPercentage()}}%</strong>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		 </div> 
+    </div>
+</div>
